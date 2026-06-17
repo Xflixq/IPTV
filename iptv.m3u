@@ -1,6 +1,42 @@
 #EXTM3U
-#EXTINF:-1 tvg-chno="1" tvg-id="BBCTwo.uk@England" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/BBC_Two_logo_2021.svg/960px-BBC_Two_logo_2021.svg.png" group-title="General",BBC Two
+#EXTINF:-1 tvg-chno="1" tvg-id="BBCOne.uk@London" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/BBC_One_logo_2021.svg/960px-BBC_One_logo_2021.svg.png" group-title="General",BBC One
+https://november.queazified.co.uk/ee971134-115e-4418-8d1d-69dff7d4c6eb.m3u8
+
+#EXTINF:-1 tvg-chno="2" tvg-id="BBCTwo.uk@England" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/BBC_Two_logo_2021.svg/960px-BBC_Two_logo_2021.svg.png" group-title="General",BBC Two
 https://x.canlitvapp.com/u-bbc2/index.m3u8
 
-#EXTINF:-1 tvg-chno="2" tvg-id="Channel5.uk@SD" tvg-logo="https://d2n0069hmnqmmx.cloudfront.net/epgdata/1.0/newchanlogos/512/512/skychb1800.png" group-title="General",Channel 5
+#EXTINF:-1 tvg-chno="3" tvg-id="ITV1.uk@London" tvg-logo="https://i.imgur.com/xwPekCF.png" group-title="General",ITV1
+http://80.194.62.172:50002/stream/channelid/95929545
+
+#EXTINF:-1 tvg-chno="4" tvg-id="Channel4.uk@UK" tvg-logo="https://d2n0069hmnqmmx.cloudfront.net/epgdata/1.0/newchanlogos/512/512/skychb1621.png" group-title="General",Channel 4
+http://80.194.62.172:50002/stream/channelid/1940621521
+
+#EXTINF:-1 tvg-chno="5" tvg-id="Channel5.uk@SD" tvg-logo="https://d2n0069hmnqmmx.cloudfront.net/epgdata/1.0/newchanlogos/512/512/skychb1800.png" group-title="General",Channel 5
 https://x.canlitvapp.com/u-channel-5/index.m3u8
+
+#EXTINF:-1 tvg-chno="6" tvg-id="ITV2.uk@SD" tvg-logo="https://i.imgur.com/2BpUK0W.png" group-title="General",ITV2
+http://80.194.62.172:50002/stream/channelid/404728797
+
+#EXTINF:-1 tvg-chno="7" tvg-id="BBCThree.uk@HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/BBC_Three_2022.svg/960px-BBC_Three_2022.svg.png" group-title="General",BBC Three
+https://streamer.nexyl.uk/39290a19-b8dd-43ea-b8dc-081c37790f24.m3u8
+
+#EXTINF:-1 tvg-chno="9" tvg-id="BBCFour.uk@UK" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/BBC_Four_logo_2021.svg/960px-BBC_Four_logo_2021.svg.png" group-title="Culture;Documentary",BBC Four
+https://vs-cmaf-pushb-uk.live.fastly.md.bbci.co.uk/x=4/i=urn:bbc:pips:service:bbc_four_hd/iptv_hd_abr_v1.mpd
+
+#EXTINF:-1 tvg-chno="11" tvg-id="SkyMix.uk@SD" tvg-logo="https://i.imgur.com/hHEz5rq.png" group-title="Undefined",Sky Mix
+http://80.194.62.172:50002/stream/channelid/1848745953
+
+#EXTINF:-1 tvg-chno="13" tvg-id="E4.uk@SD" tvg-logo="https://i.imgur.com/22MfjF4.png" group-title="Entertainment",E4
+http://80.194.62.172:50002/stream/channelid/1096333958
+
+#EXTINF:-1 tvg-chno="14" tvg-id="Film4.uk@SD" tvg-logo="https://i.imgur.com/MTSgoGI.png" group-title="Movies",Film4
+http://80.194.62.172:50002/stream/channelid/1764271106
+
+#EXTINF:-1 tvg-chno="18" tvg-id="UW.uk@SD" tvg-logo="https://i.imgur.com/puBkpGj.png" group-title="Undefined",U&W
+http://92.114.85.72:8000/play/a0bj
+
+#EXTINF:-1 tvg-chno="25" tvg-id="TogetherTV.uk@SD" tvg-logo="https://i.imgur.com/wf62HhM.png" group-title="Undefined",Together TV
+http://92.114.85.72:8000/play/a0j8
+
+#EXTINF:-1 tvg-chno="26" tvg-id="ThatsTV.uk@SD" tvg-logo="https://i.imgur.com/rmdfcyG.png" group-title="Undefined",That's TV
+http://92.114.85.72:8000/play/a0lb

@@ -1,62 +1,98 @@
-import requests
 import json
+import re
+import requests
 
 SOURCE = "https://iptv-org.github.io/iptv/countries/uk.m3u"
+OUTPUT = "iptv.m3u"
 
-with open("channels.json", encoding="utf-8") as f:
-    mapping = json.load(f)
+with open("channels.json", "r", encoding="utf-8") as f:
+    CHANNELS = json.load(f)
 
-def normalize(name):
+def normalise(name):
+    name = re.sub(r"\s*\(.*?\)", "", name)
     return name.strip().lower()
 
-wanted = {}
-for new_name, aliases in mapping.items():
-    wanted[new_name] = set(normalize(alias) for alias in [new_name] + aliases)
-
-playlist = requests.get(SOURCE, timeout=30).text.splitlines()
+print("Downloading playlist...")
+data = requests.get(SOURCE, timeout=60).text.splitlines()
 
 entries = []
+
 i = 0
+while i < len(data):
 
-while i < len(playlist):
-    if playlist[i].startswith("#EXTINF"):
-        name = playlist[i].split(",")[-1].strip()
+    line = data[i]
 
-        if i + 1 < len(playlist):
-            url = playlist[i + 1]
+    if line.startswith("#EXTINF") and i + 1 < len(data):
+
+        url = data[i + 1]
+
+        if url.startswith("http"):
+
+            name = line.split(",")[-1].strip()
+
             entries.append({
                 "name": name,
-                "normalized_name": normalize(name),
-                "extinf": playlist[i],
+                "extinf": line,
                 "url": url
             })
+
     i += 1
 
-out = ["#EXTM3U"]
+output = ["#EXTM3U"]
 
-channel_no = 1
+for chno in sorted(CHANNELS.keys(), key=int):
 
-for target in mapping:
-    for entry in entries:
-        if entry["normalized_name"] in wanted[target]:
+    aliases = CHANNELS[chno]
 
-            extinf = entry["extinf"]
-            extinf = extinf[:extinf.rfind(",")] + "," + target
+    found = None
 
-            if 'tvg-chno="' not in extinf:
-                extinf = extinf.replace(
-                    "#EXTINF:-1",
-                    f'#EXTINF:-1 tvg-chno="{channel_no}"'
-                )
+    for wanted in aliases:
 
-            out.append(extinf)
-            out.append(entry["url"])
-            out.append("")
+        wanted_norm = normalise(wanted)
 
-            channel_no += 1
+        for entry in entries:
+
+            source_norm = normalise(entry["name"])
+
+            if (
+                source_norm == wanted_norm
+                or source_norm.startswith(wanted_norm)
+                or wanted_norm in source_norm
+            ):
+                found = entry
+                break
+
+        if found:
             break
 
-with open("iptv.m3u", "w", encoding="utf-8") as f:
-    f.write("\n".join(out))
+    if not found:
+        print(f"Missing: {aliases[0]}")
+        continue
 
-print("Generated iptv.m3u")
+    extinf = found["extinf"]
+
+    extinf = re.sub(
+        r'tvg-chno="[^"]*"',
+        '',
+        extinf
+    )
+
+    extinf = re.sub(
+        r",.*$",
+        f",{aliases[0]}",
+        extinf
+    )
+
+    extinf = extinf.replace(
+        "#EXTINF:-1",
+        f'#EXTINF:-1 tvg-chno="{chno}"'
+    )
+
+    output.append(extinf)
+    output.append(found["url"])
+    output.append("")
+
+with open(OUTPUT, "w", encoding="utf-8") as f:
+    f.write("\n".join(output))
+
+print(f"Generated {OUTPUT}")

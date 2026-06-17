@@ -1,101 +1,158 @@
+#!/bin/bash
+
+set -e
+
+echo "Creating IPTV project..."
+
 mkdir -p .github/workflows
 
 cat > channels.json << 'EOF'
 {
-  "BBC One": ["BBC One London","BBC One NW","BBC One HD"],
-  "BBC Two": ["BBC Two HD"],
-  "ITV1": ["ITV1 Granada","ITV1 London","ITV1 HD"],
-  "Channel 4": ["Channel 4 HD"],
-  "Channel 5": ["5","Channel 5 HD"],
-  "ITV2": ["ITV2 HD"],
-  "BBC Three": ["BBC Three HD"],
-  "BBC Four": ["BBC Four HD"],
-  "ITV3": ["ITV3 HD"],
-  "ITV4": ["ITV4 HD"],
-  "E4": ["E4 HD"],
-  "More4": ["More4 HD"],
-  "Film4": ["Film4 HD"],
-  "BBC News": ["BBC News HD"],
-  "Sky News": ["Sky News"]
+  "1": ["BBC One"],
+  "2": ["BBC Two"],
+  "3": ["ITV1"],
+  "4": ["Channel 4"],
+  "5": ["Channel 5"],
+  "6": ["ITV2"],
+  "7": ["BBC Three"],
+  "9": ["BBC Four"],
+  "10": ["ITV3"],
+  "11": ["Sky Mix"],
+  "12": ["U&Dave"],
+  "13": ["E4"],
+  "14": ["Film4"],
+  "15": ["Channel 4+1"],
+  "16": ["More4"],
+  "17": ["5STAR"],
+  "18": ["U&W"],
+  "19": ["U&Drama"],
+  "20": ["U&Yesterday"],
+  "21": ["5USA"],
+  "22": ["Really"],
+  "23": ["DMAX"],
+  "24": ["PBS America"],
+  "25": ["Together TV"],
+  "26": ["That's TV"]
 }
 EOF
 
+cat > requirements.txt << 'EOF'
+requests
+EOF
+
 cat > build.py << 'EOF'
-import requests
 import json
+import re
+import requests
 
 SOURCE = "https://iptv-org.github.io/iptv/countries/uk.m3u"
+OUTPUT = "iptv.m3u"
 
-with open("channels.json", encoding="utf-8") as f:
-    mapping = json.load(f)
+with open("channels.json", "r", encoding="utf-8") as f:
+    CHANNELS = json.load(f)
 
-def normalize(name):
+def normalise(name):
+    name = re.sub(r"\s*\(.*?\)", "", name)
     return name.strip().lower()
 
-wanted = {}
-for new_name, aliases in mapping.items():
-    wanted[new_name] = set(normalize(alias) for alias in [new_name] + aliases)
-
-playlist = requests.get(SOURCE, timeout=30).text.splitlines()
+print("Downloading playlist...")
+data = requests.get(SOURCE, timeout=60).text.splitlines()
 
 entries = []
+
 i = 0
+while i < len(data):
 
-while i < len(playlist):
-    if playlist[i].startswith("#EXTINF"):
-        name = playlist[i].split(",")[-1].strip()
+    line = data[i]
 
-        if i + 1 < len(playlist):
-            url = playlist[i + 1]
+    if line.startswith("#EXTINF") and i + 1 < len(data):
+
+        url = data[i + 1]
+
+        if url.startswith("http"):
+
+            name = line.split(",")[-1].strip()
+
             entries.append({
                 "name": name,
-                "normalized_name": normalize(name),
-                "extinf": playlist[i],
+                "extinf": line,
                 "url": url
             })
+
     i += 1
 
-out = ["#EXTM3U"]
+output = ["#EXTM3U"]
 
-channel_no = 1
+for chno in sorted(CHANNELS.keys(), key=int):
 
-for target in mapping:
-    for entry in entries:
-        if entry["normalized_name"] in wanted[target]:
+    aliases = CHANNELS[chno]
 
-            extinf = entry["extinf"]
-            extinf = extinf[:extinf.rfind(",")] + "," + target
+    found = None
 
-            if 'tvg-chno="' not in extinf:
-                extinf = extinf.replace(
-                    "#EXTINF:-1",
-                    f'#EXTINF:-1 tvg-chno="{channel_no}"'
-                )
+    for wanted in aliases:
 
-            out.append(extinf)
-            out.append(entry["url"])
-            out.append("")
+        wanted_norm = normalise(wanted)
 
-            channel_no += 1
+        for entry in entries:
+
+            source_norm = normalise(entry["name"])
+
+            if (
+                source_norm == wanted_norm
+                or source_norm.startswith(wanted_norm)
+                or wanted_norm in source_norm
+            ):
+                found = entry
+                break
+
+        if found:
             break
 
-with open("iptv.m3u", "w", encoding="utf-8") as f:
-    f.write("\n".join(out))
+    if not found:
+        print(f"Missing: {aliases[0]}")
+        continue
 
-print("Generated iptv.m3u")
+    extinf = found["extinf"]
+
+    extinf = re.sub(
+        r'tvg-chno="[^"]*"',
+        '',
+        extinf
+    )
+
+    extinf = re.sub(
+        r",.*$",
+        f",{aliases[0]}",
+        extinf
+    )
+
+    extinf = extinf.replace(
+        "#EXTINF:-1",
+        f'#EXTINF:-1 tvg-chno="{chno}"'
+    )
+
+    output.append(extinf)
+    output.append(found["url"])
+    output.append("")
+
+with open(OUTPUT, "w", encoding="utf-8") as f:
+    f.write("\n".join(output))
+
+print(f"Generated {OUTPUT}")
 EOF
 
 cat > .github/workflows/update.yml << 'EOF'
-name: Update Freeview Playlist
+name: Update IPTV Playlist
 
 on:
   workflow_dispatch:
 
   schedule:
-    - cron: "0 3 * * *"
+    - cron: '0 3 * * *'
 
 jobs:
   update:
+
     runs-on: ubuntu-latest
 
     permissions:
@@ -106,9 +163,9 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
 
-      - run: pip install requests
+      - run: pip install -r requirements.txt
 
       - run: python build.py
 
@@ -117,24 +174,17 @@ jobs:
           git config user.name "github-actions"
           git config user.email "actions@github.com"
 
-          git add freeview.m3u
+          git add iptv.m3u
 
-          git diff --cached --quiet || git commit -m "Update playlist"
+          git diff --cached --quiet || git commit -m "Update IPTV playlist"
 
           git push
 EOF
 
-cat > README.md << 'EOF'
-# Freeview IPTV Playlist
+python3 -m pip install -r requirements.txt
 
-Automatically generated from IPTV-org UK playlist.
+python3 build.py
 
-Playlist URL:
-
-https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/freeview.m3u
-EOF
-
-pip install requests
-python build.py
-
-echo "Project created successfully."
+echo ""
+echo "Done."
+echo "Playlist generated: iptv.m3u"
