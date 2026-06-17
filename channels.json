@@ -1,0 +1,17 @@
+{
+  "BBC One": ["BBC One London","BBC One NW","BBC One HD"],
+  "BBC Two": ["BBC Two HD"],
+  "ITV1": ["ITV1 Granada","ITV1 London","ITV1 HD"],
+  "Channel 4": ["Channel 4 HD"],
+  "Channel 5": ["5","Channel 5 HD"],
+  "ITV2": ["ITV2 HD"],
+  "BBC Three": ["BBC Three HD"],
+  "BBC Four": ["BBC Four HD"],
+  "ITV3": ["ITV3 HD"],
+  "ITV4": ["ITV4 HD"],
+  "E4": ["E4 HD"],
+  "More4": ["More4 HD"],
+  "Film4": ["Film4 HD"],
+  "BBC News": ["BBC News HD"],
+  "Sky News": ["Sky News"]
+}
