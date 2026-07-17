@@ -8,9 +8,6 @@ http://193.46.58.239:8080/BBCTwoHD/index.m3u8
 #EXTINF:-1 tvg-chno="3" tvg-id="ITV1.uk@London" tvg-logo="https://i.imgur.com/xwPekCF.png" group-title="General",ITV1
 http://80.194.62.172:50002/stream/channelid/95929545
 
-#EXTINF:-1 tvg-chno="4" tvg-id="Channel4.uk@UK" tvg-logo="https://d2n0069hmnqmmx.cloudfront.net/epgdata/1.0/newchanlogos/512/512/skychb1621.png" group-title="General",Channel 4
-http://80.194.62.172:50002/stream/channelid/1940621521
-
 #EXTINF:-1 tvg-chno="5" tvg-id="Channel5.uk@HD" tvg-logo="https://d2n0069hmnqmmx.cloudfront.net/epgdata/1.0/newchanlogos/512/512/skychb1800.png" group-title="General",Channel 5
 http://193.46.58.239:8080/Channel5/index.m3u8
 
