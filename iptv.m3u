@@ -5,8 +5,14 @@ https://vs-cmaf-pushb-uk-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_one_e
 #EXTINF:-1 tvg-chno="2" tvg-id="BBCTwo.uk@HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/BBC_Two_logo_2021.svg/960px-BBC_Two_logo_2021.svg.png" group-title="General",BBC Two
 http://193.46.58.239:8080/BBCTwoHD/index.m3u8
 
-#EXTINF:-1 tvg-chno="5" tvg-id="Channel5.uk@HD" tvg-logo="https://d2n0069hmnqmmx.cloudfront.net/epgdata/1.0/newchanlogos/512/512/skychb1800.png" group-title="General",Channel 5
-http://193.46.58.239:8080/Channel5/index.m3u8
+#EXTINF:-1 tvg-chno="3" tvg-id="ITV1.uk@London" tvg-logo="https://i.imgur.com/xwPekCF.png" group-title="General",ITV1
+https://xemzi.short.gy/1000011
+
+#EXTINF:-1 tvg-chno="5" tvg-id="Channel5.uk@SD" tvg-logo="https://d2n0069hmnqmmx.cloudfront.net/epgdata/1.0/newchanlogos/512/512/skychb1800.png" group-title="General",Channel 5
+https://xemzi.short.gy/1000030
+
+#EXTINF:-1 tvg-chno="6" tvg-id="ITV2.uk@HD" tvg-logo="https://i.imgur.com/2BpUK0W.png" group-title="General",ITV2
+https://xemzi.short.gy/1000012
 
 #EXTINF:-1 tvg-chno="7" tvg-id="BBCThree.uk@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/BBC_Three_2022.svg/960px-BBC_Three_2022.svg.png" group-title="General",BBC Three
 https://vs-cmaf-pushb-uk-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_three_hd/iptv_hd_abr_v1.mpd
